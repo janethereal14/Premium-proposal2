@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Forever</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:italic,wght@400;700&family=Inter:wght@300&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --gold: #d4af37;
+            --bg-black: #050505;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            background-color: var(--bg-black);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Romantic Vignette */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.9) 100%);
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        body.locked { overflow: hidden; height: 100vh; }
+
+        .page {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            width: 100%;
+            position: relative;
+        }
+
+        .active { display: flex; }
+
+        #heartCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        /* Input Styling */
+        #pass-input {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--gold);
+            color: white;
+            font-size: 2.5rem;
+            text-align: center;
+            letter-spacing: 12px;
+            width: 220px;
+            outline: none;
+            margin-bottom: 30px;
+        }
+
+        .btn-gold {
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 12px 40px;
+            cursor: pointer;
+            transition: 0.5s ease;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            z-index: 101;
+            font-size: 0.8rem;
+        }
+
+        .btn-gold:hover {
+            background: var(--gold);
+            color: #000;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Content Pacing */
+        .para {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 2s ease, transform 1.5s ease;
+            margin-bottom: 280px;
+            font-size: 1.7rem;
+            line-height: 2.4;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            max-width: 750px;
+            padding: 0 30px;
+        }
+
+        .para.visible { opacity: 1; transform: translateY(0); }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-top: 60px;
+            max-width: 800px;
+            margin: 60px auto;
+        }
+
+        .photo-grid img { 
+            width: 100%; 
+            opacity: 0; 
+            transition: 2.5s ease; 
+            border: 1px solid rgba(212,175,55,0.2);
+        }
+        .photo-grid img.visible { opacity: 1; }
+
+        .diamond-shine { font-size: 8rem; filter: drop-shadow(0 0 30px #fff); animation: ringPulse 2s infinite; }
+        @keyframes ringPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+    </style>
+</head>
+<body class="locked">
+
+    <audio id="bg-music" loop preload="auto" playsinline>
+        <source src="Justin-Bieber-Come-Around-Me-(TrendyBeatz.com).mp3" type="audio/mpeg">
+    </audio>
+    <canvas id="heartCanvas"></canvas>
+
+    <section id="page1" class="page active">
+        <h2 style="color: var(--gold); letter-spacing: 10px; font-weight: 300;">ETERNAL</h2>
+        <input type="password" id="pass-input" maxlength="4" placeholder="••••">
+        <button class="btn-gold" onclick="checkPass()">Unlock My Heart</button>
+    </section>
+
+    <section id="page2" class="page" style="justify-content: flex-start;">
+        <div class="content-wrap" style="margin-top: 35vh;">
+            <p class="para">In a world of billions, my heart chose you.</p>
+            <p class="para">It wasn't a single moment, but a thousand little ones... the way you look at me, the way you say my name.</p>
+            <p class="para">I found a soul that speaks the same language as mine, a warmth that feels like coming home.</p>
+            <p class="para">You are the poetry I never knew I could write, the melody I want to play on repeat forever.</p>
+            <p class="para" style="color: var(--gold);">Our Most Precious Memories</p>
+            
+            <div class="photo-grid">
+                <img src="Screenshot_2026-05-04-15-30-22-145.jpeg" class="mem-pic">
+                <img src="Screenshot_2026-05-04-15-49-55-674.jpeg" class="mem-pic">
+                <img src="Screenshot_2026-05-04-15-34-31-232.jpeg" class="mem-pic">
+                <img src="Screenshot_2026-05-04-15-51-20-647.jpeg" class="mem-pic">
+            </div>
+
+            <div style="height: 350px;"></div>
+            <button class="btn-gold para" onclick="showProposal()">A Final Confession</button>
+            <div style="height: 150px;"></div>
+        </div>
+    </section>
+
+    <section id="page3" class="page">
+        <div id="gift-section">
+            <div id="ring-box" style="font-size: 6rem; cursor: pointer;">🎁</div>
+            <div id="diamond" style="display:none;" class="diamond-shine">💍</div>
+        </div>
+        
+        <div id="proposal-ui" style="display:none; margin-top: 40px;">
+            <h2 id="prop-text" style="font-family: 'Playfair Display', serif; font-size: 2.2rem;">Will you walk through forever with me?</h2>
+            <button class="btn-gold" onclick="sayYes()">YES</button>
+            <button class="btn-gold" id="no-btn" onmouseover="moveNo()">NO</button>
+        </div>
+        
+        <div id="final-celebration" style="display:none;">
+            <div style="height: 100vh; display: flex; align-items: center; justify-content: center; padding: 40px;">
+                 <p class="para" style="opacity:1; transform:none; margin-bottom: 0;">
+                    Being loved by you is the greatest honor of my life. I promise to cherish you, protect us, and love you more with every breath I take. You are my everything.
+                 </p>
+            </div>
+            <video width="90%" style="max-width: 700px; border: 2px solid var(--gold);" id="v-player" playsinline><source src="VID-20260409-WA0002~2.mp4" type="video/mp4"></video>
+            <h1 style="color: var(--gold); font-family: 'Playfair Display', serif; font-size: 4.5rem; margin: 120px 0;">Yes! Finally!!! ❤️</h1>
+            <div style="height: 250px;"></div>
+        </div>
+    </section>
+
+    <script>
+        const canvas = document.getElementById('heartCanvas');
+        const ctx = canvas.getContext('2d');
+        const music = document.getElementById('bg-music');
+        let hearts = [];
+
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Heart {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = -50;
+                this.size = Math.random() * 20 + 20;
+                this.speed = Math.random() * 2 + 1;
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = (Math.random() - 0.5) * 2;
+                this.opacity = 1;
+                this.flip = 0;
+            }
+            update() {
+                this.y += this.speed;
+                this.rotation += this.rotationSpeed;
+                this.flip += 0.05;
+                if (this.y > canvas.height) { this.y = -50; this.opacity = 1; }
+                if (this.y > canvas.height * 0.7) this.opacity -= 0.005;
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation * Math.PI / 180);
+                ctx.scale(Math.sin(this.flip), 1);
+                ctx.globalAlpha = Math.max(0, this.opacity);
+                ctx.fillStyle = '#ff4d6d';
+                ctx.font = `${this.size}px serif`;
+                ctx.fillText('❤️', 0, 0);
+                ctx.restore();
+            }
+        }
+
+        function animateHearts() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            hearts.forEach(h => { h.update(); h.draw(); });
+            requestAnimationFrame(animateHearts);
+        }
+
+        function checkPass() {
+            if(document.getElementById('pass-input').value === "1423") {
+                // Unlock Audio for Mobile
+                music.play().catch(() => {
+                    document.addEventListener('touchstart', () => { music.play(); }, {once: true});
+                });
+
+                document.getElementById('page1').style.display = 'none';
+                document.getElementById('page2').style.display = 'flex';
+                document.body.classList.remove('locked');
+
+                for(let i=0; i<60; i++) { hearts.push(new Heart()); }
+                animateHearts();
+                initObserver();
+                autoScroll();
+            } else { alert("Try again, my love."); }
+        }
+
+        function initObserver() {
+            const obs = new IntersectionObserver(entries => {
+                entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.para, .mem-pic').forEach(el => obs.observe(el));
+        }
+
+        function autoScroll() {
+            setTimeout(() => {
+                const scroller = setInterval(() => {
+                    if(document.getElementById('page2').style.display === 'flex') {
+                        window.scrollBy(0, 1.2);
+                        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) clearInterval(scroller);
+                    } else { clearInterval(scroller); }
+                }, 30);
+            }, 3000);
+        }
+
+        function showProposal() {
+            document.getElementById('page2').style.display = 'none';
+            document.getElementById('page3').style.display = 'flex';
+            window.scrollTo(0,0);
+            document.getElementById('ring-box').onclick = function() {
+                this.style.display = 'none';
+                document.getElementById('diamond').style.display = 'block';
+                document.getElementById('proposal-ui').style.display = 'block';
+            };
+        }
+
+        function moveNo() {
+            const btn = document.getElementById('no-btn');
+            btn.style.position = 'fixed';
+            btn.style.left = Math.random() * 80 + '%';
+            btn.style.top = Math.random() * 80 + '%';
+        }
+
+        function sayYes() {
+            document.getElementById('proposal-ui').style.display = "none";
+            document.getElementById('gift-section').style.display = "none";
+            document.getElementById('final-celebration').style.display = "block";
+            document.getElementById('v-player').play();
+            document.body.style.overflow = "auto";
+            setTimeout(() => {
+                const finalScroll = setInterval(() => {
+                    window.scrollBy(0, 2);
+                    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) clearInterval(finalScroll);
+                }, 30);
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
